@@ -109,7 +109,7 @@ ipv6_number = list(map(int, ip_address.split('.')))
 
 
 def base_py(cowrie_install_dir):
-    with open("{0}{1}".format(cowrie_install_dir, "/cowrie/commands/base.py"), "r+") as base_file:
+    with open("{0}{1}".format(cowrie_install_dir, "/src/cowrie/commands/base.py"), "r+") as base_file:
         user = random.choice(users)
         base = base_file.read()
         base_file.seek(0)
@@ -164,7 +164,7 @@ def base_py(cowrie_install_dir):
 
 
 def free_py(cowrie_install_dir):
-    with open("{0}{1}".format(cowrie_install_dir, "/cowrie/commands/free.py"), "r+") as free_file:
+    with open("{0}{1}".format(cowrie_install_dir, "/src/cowrie/commands/free.py"), "r+") as free_file:
         free = free_file.read()
         free_file.seek(0)
         total = int(ram_size - ((3 * ram_size) / 100.0))
@@ -200,7 +200,7 @@ def free_py(cowrie_install_dir):
 
 
 def ifconfig_py(cowrie_install_dir):
-    with open("{0}{1}".format(cowrie_install_dir, "/cowrie/commands/ifconfig.py"), "r+") as ifconfig_file:
+    with open("{0}{1}".format(cowrie_install_dir, "/src/cowrie/commands/ifconfig.py"), "r+") as ifconfig_file:
         ifconfig = ifconfig_file.read()
         ifconfig_file.seek(0)
         eth_rx = randint(10000000000, 500000000000)
@@ -242,7 +242,7 @@ def version_uname(cowrie_install_dir):
     with open("{0}{1}".format(cowrie_install_dir, "/honeyfs/proc/version"), "w")  as version_file:
         version_file.write(version)
         version_file.close()
-    with open("{0}{1}".format(cowrie_install_dir, "/cowrie/commands/uname.py"), "r+")  as uname_file:
+    with open("{0}{1}".format(cowrie_install_dir, "/src/cowrie/commands/uname.py"), "r+")  as uname_file:
         uname_py = uname_file.read()
         uname_file.seek(0)
         test = ""
@@ -423,7 +423,7 @@ def shadow(cowrie_install_dir):
 
 
 def cowrie_cfg(cowrie_install_dir):
-	with open("{0}{1}".format(cowrie_install_dir, "/cowrie.cfg.dist"), "r+") as cowrie_cfg:
+	with open("{0}{1}".format(cowrie_install_dir, "/etc/cowrie.cfg.dist"), "r+") as cowrie_cfg:
 		cowrie_config = cowrie_cfg.read()
 		cowrie_cfg.seek(0)
 		replacements = {"svr04": hostname, "#fake_addr = 192.168.66.254": "fake_addr = {0}".format(ip_address),
@@ -433,7 +433,7 @@ def cowrie_cfg(cowrie_install_dir):
 		regexp = re.compile('|'.join(map(re.escape, substrs)))
 		config_update = regexp.sub(lambda match: replacements[match.group(0)], cowrie_config)
 		cowrie_cfg.close()
-		with open("{0}{1}".format(cowrie_install_dir, "/cowrie.cfg"), "w+") as cowrie_cfg_update:
+		with open("{0}{1}".format(cowrie_install_dir, "/etc/cowrie.cfg"), "w+") as cowrie_cfg_update:
 			cowrie_cfg_update.write(config_update)
 			cowrie_cfg_update.truncate()
 			cowrie_cfg_update.close()
@@ -467,7 +467,7 @@ def issue(cowrie_install_dir):
 
 
 def userdb(cowrie_install_dir):
-    with open("{0}{1}".format(cowrie_install_dir, "/data/userdb.txt"), "r+") as userdb_file:
+    with open("{0}{1}".format(cowrie_install_dir, "/etc/userdb.txt"), "r+") as userdb_file:
         userdb = userdb_file.read()
         userdb_file.seek(0)
         replacements = {"richard:x:*": "", "richard:x:fout": ""}
@@ -482,7 +482,7 @@ def userdb(cowrie_install_dir):
 
 
 def fs_pickle(cowrie_install_dir):
-    launch = "python {0}/bin/fsctl {1}/data/fs.pickle".format(cowrie_install_dir, cowrie_install_dir)
+    launch = "python {0}/bin/fsctl {1}/share/cowrie/fs.pickle".format(cowrie_install_dir, cowrie_install_dir)
     p = pexpect.spawn(launch)
     p.expect(".*.\r\n\r\nfs.pickle:.*")
     p.sendline("rm -r /home/richard")
