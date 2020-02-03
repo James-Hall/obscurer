@@ -97,7 +97,7 @@ sed -i 's/DAEMONIZE=""/DAEMONIZE="-n"/' bin/cowrie
 
 # Obscurer.py running
 cd /opt/obscurer
-# we run obscurer multiple times to add multiple users that except *
+# we run obscurer multiple times to add multiple users that Accept *
 ./obscurer.py -a /opt/cowrie
 ./obscurer.py -a /opt/cowrie
 ./obscurer.py -a /opt/cowrie
