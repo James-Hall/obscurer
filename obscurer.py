@@ -11,6 +11,13 @@ import sys
 import pexpect
 import os
 
+
+
+###### Configs #####
+port = 22
+####################
+
+
 def rand_hex():
     return '{0}{1}'.format(random.choice('0123456789ABCDEF'), random.choice('0123456789ABCDEF'))
 
@@ -139,21 +146,21 @@ def base_py(cowrie_install_dir):
                 '{0}.{1}'.format(randint(0, 4), randint(0, 9)), randint(10000, 25000), randint(500, 2500),
                 '?', random.choice(['S', 'S<', 'S+', 'Sl']), time.strftime('%H:%m'), '0:00', random.choice(ps_aux_usr))
             t -= 1
-        new_base += "\t\t\t('{0:<10}', '{1:>4}', '{2:>5}', '{3:>5}', '{4:>7}', '{5:>6}', '{6:<10}', '{7:<5}', '{8:>5}', '{9:>8}', '{10}',),\n".format(
+        new_base += "\t\t\t('{0:<10}', '{1:>4}', '{2:>5}', '{3:>5}', '{4:>7}', '{5:>6}', '{6:<10}', '{7:<5}', '{8:>5}', '{9:>8}', {10},),\n".format(
             'root', usr_pid + randint(20, 100), '0.{0}'.format(randint(0, 9)), '0.{0}'.format(randint(0, 9)),
             randint(1000, 6000), randint(500, 2500), '?', random.choice(['S', 'S<', 'S+', 'Sl']),
-            time.strftime('%H:%m'), '0:{0}{1}'.format(0, randint(0, 3)), '/usr/sbin/sshd: %s@pts/0\' % user')
-        new_base += "\t\t\t('{0:<10}', '{1:>4}', '{2:>5}', '{3:>5}', '{4:>7}', '{5:>6}', '{6:<10}', '{7:<5}', '{8:>5}', '{9:>8}', '{10}',),\n".format(
+            time.strftime('%H:%m'), '0:{0}{1}'.format(0, randint(0, 3)), '\'/usr/sbin/sshd: %s@pts/0\' % user')
+        new_base += "\t\t\t({0:<10}, '{1:>4}', '{2:>5}', '{3:>5}', '{4:>7}', '{5:>6}', '{6:<10}', '{7:<5}', '{8:>5}', '{9:>8}', '{10}',),\n".format(
             '\'%s\'.ljust(8) % user', usr_pid + randint(20, 100), '0.{0}'.format(randint(0, 9)),
             '0.{0}'.format(randint(0, 9)), randint(1000, 6000), randint(500, 2500), 'pts/{0}'.format(randint(0, 5)),
             random.choice(['S', 'S<', 'S+', 'Sl']), time.strftime('%H:%m'),
             '0:{0}{1}'.format(0, randint(0, 3)), '-bash')
-        new_base += "\t\t\t('{0:<10}', '{1:>4}', '{2:>5}', '{3:>5}', '{4:>7}', '{5:>6}', '{6:<10}', '{7:<5}', '{8:>5}', '{9:>8}', '{10}',),\n".format(
+        new_base += "\t\t\t({0:<10}, '{1:>4}', '{2:>5}', '{3:>5}', '{4:>7}', '{5:>6}', '{6:<10}', '{7:<5}', '{8:>5}', '{9:>8}', {10},),\n".format(
             '\'%s\'.ljust(8) % user', usr_pid + randint(20, 100), '0.{0}'.format(randint(0, 9)),
             '0.{0}'.format(randint(0, 9)), randint(1000, 6000), randint(500, 2500), 'pts/{0}'.format(randint(0, 5)),
             random.choice(['S', 'S<', 'S+', 'Sl']),
             time.strftime('%H:%m'), '0:{0}{1}'.format(0, randint(0, 3)), '\'ps %s\' % \' \'.join(self.args)')
-        new_base += "\t\t\t)\n\t\t"
+        new_base += "\t\t\t)\n\t"
         base_replacements = {to_replace[0]: new_base}
         substrs = sorted(base_replacements, key=len, reverse=True)
         regexp = re.compile('|'.join(map(re.escape, substrs)))
@@ -427,8 +434,8 @@ def cowrie_cfg(cowrie_install_dir):
 		cowrie_config = cowrie_cfg.read()
 		cowrie_cfg.seek(0)
 		replacements = {"svr04": hostname, "#fake_addr = 192.168.66.254": "fake_addr = {0}".format(ip_address),
-		"ssh_version_string = SSH-2.0-OpenSSH_6.0p1 Debian-4+deb7u2": "ssh_version_string = {0}".format(sshversion), "#listen_port = 2222": "listen_port = 22",
-		"tcp:2222": "tcp:22"}
+		"ssh_version_string = SSH-2.0-OpenSSH_6.0p1 Debian-4+deb7u2": "ssh_version_string = {0}".format(sshversion), "#listen_port = 2222": "listen_port = {0}",
+		"tcp:2222": "tcp:{0}".format(port)}
 		substrs = sorted(replacements, key=len, reverse=True)
 		regexp = re.compile('|'.join(map(re.escape, substrs)))
 		config_update = regexp.sub(lambda match: replacements[match.group(0)], cowrie_config)
@@ -545,7 +552,7 @@ SSH Version: {4}
 SSH Listen Port: {5}
 Internal IP: {6}
 
-""".format(users, password, hostname, version, sshversion, "22", ip_address)
+""".format(users, password, hostname, version, sshversion, port, ip_address)
 
 if __name__ == "__main__":
     parser = OptionParser(usage='usage: python %prog cowrie/install/dir [options]')
