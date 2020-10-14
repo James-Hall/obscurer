@@ -1,0 +1,26 @@
+Functions to work on
+
+boscutti939:
+base_py(cowrie_install_dir)
+free_py(cowrie_install_dir)
+ifconfig_py(cowrie_install_dir)
+arp_py(cowrie_install_dir)
+fs_pickle(cowrie_install_dir)
+
+kkimhai:
+version_uname(cowrie_install_dir)
+meminfo_py(cowrie_install_dir)
+mounts(cowrie_install_dir)
+cpuinfo(cowrie_install_dir)
+
+KHAZARIK:
+group(cowrie_install_dir)
+passwd(cowrie_install_dir)
+shadow(cowrie_install_dir)
+cowrie_cfg(cowrie_install_dir)
+
+tejbirsi:
+hosts(cowrie_install_dir)
+hostname_py(cowrie_install_dir)
+issue(cowrie_install_dir)
+userdb(cowrie_install_dir)
